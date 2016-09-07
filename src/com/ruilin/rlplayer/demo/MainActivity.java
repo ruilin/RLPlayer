@@ -18,21 +18,18 @@
 package com.ruilin.rlplayer.demo;
 
 
-import android.os.Bundle;
-import android.os.Environment;
-
-import com.leixiaohua1020.sffmpegandroiddecoder.R;
-import com.ruilin.rlplayer.player.JJMediaSDK;
+import com.ruilin.rlplayer.R;
+import com.ruilin.rlplayer.media.RlMediaSDK;
 
 import android.app.Activity;
-import android.text.Editable;
+import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -40,7 +37,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        JJMediaSDK.init(this, null, false, null);
+        RlMediaSDK.init(this, null, false, null);
         
         setContentView(R.layout.activity_main);
         
@@ -63,7 +60,7 @@ public class MainActivity extends Activity {
 		        Log.i("outputurl",outputurl);
 		    
 //		        decode(inputurl,outputurl);
-		        JJMediaSDK.rcvStreamStartJni(inputurl);
+		        RlMediaSDK.rcvStreamStartJni(inputurl);
 		        
 			}
 		});

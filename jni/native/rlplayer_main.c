@@ -7,8 +7,7 @@
 
 #include <stdio.h>
 #include <native/decoder/hw_deocder.h>
-#include "com_ruilin_rlplayer_player_JJMediaSDK.h"
-
+#include "com_ruilin_rlplayer_player_RlMediaSDK.h"
 #include "player/player.h"
 #include "player/gl_renderer.h"
 
@@ -45,7 +44,7 @@ void changeDecodeMode(JNIEnv *env, BOOL _isHwDecode) {
 	return;
 }
 
-JOWW(jboolean, initAvCoreJni)(JNIEnv *env, jobject obj, jobject ctx, jobject cb, jboolean ifOpenHwDecode, jstring logPath) {
+JNI(jboolean, initAvCoreJni)(JNIEnv *env, jobject obj, jobject ctx, jobject cb, jboolean ifOpenHwDecode, jstring logPath) {
 	BOOL errFlg = TRUE;
 	player = NULL;
 	hw_decoder = hw_decoder_create(env);
@@ -62,7 +61,7 @@ JOWW(jboolean, initAvCoreJni)(JNIEnv *env, jobject obj, jobject ctx, jobject cb,
 	return errFlg;
 }
 
-JOWW(jboolean, freeAvCoreJni)(JNIEnv *env, jobject obj) {
+JNI(jboolean, freeAvCoreJni)(JNIEnv *env, jobject obj) {
 	gl_uninit(env);
 	hw_decoder_destroy(env, hw_decoder);
 	hw_decoder = NULL;
@@ -84,38 +83,38 @@ void ffmpeg_decoder_onVideo(void *callbackObject, unsigned char *data, unsigned 
 	return;
 }
 
-JOWW(jboolean, rcvStreamStartJni)(JNIEnv *env, jobject obj, jstring path) {
+JNI(jboolean, rcvStreamStartJni)(JNIEnv *env, jobject obj, jstring path) {
 	const char *filePath = (*env)->GetStringUTFChars(env, path, NULL);
 	(*env)->ReleaseStringUTFChars(env, path, filePath);
 	decodeFile(filePath, ffmpeg_decoder_onVideo, env);
 	return TRUE;
 }
 
-JOWW(jboolean, rcvStreamStopJni)(JNIEnv *env, jobject obj) {
+JNI(jboolean, rcvStreamStopJni)(JNIEnv *env, jobject obj) {
 	return TRUE;
 }
 
-JOWW(jboolean, muteAudioStreamJni)(JNIEnv *env, jobject obj, jboolean en) {
+JNI(jboolean, muteAudioStreamJni)(JNIEnv *env, jobject obj, jboolean en) {
 	return TRUE;
 }
 
-JOWW(jboolean, muteVideoStreamJni)(JNIEnv *env, jobject obj, jboolean en) {
+JNI(jboolean, muteVideoStreamJni)(JNIEnv *env, jobject obj, jboolean en) {
 	return TRUE;
 }
 
-JOWW(jstring, getSDKVerion)(JNIEnv *env, jobject obj) {
+JNI(jstring, getSDKVerion)(JNIEnv *env, jobject obj) {
 	return "";
 }
 
-JOWW(jobject, getMediaInfo)(JNIEnv *env, jobject obj) {
+JNI(jobject, getMediaInfo)(JNIEnv *env, jobject obj) {
 	return NULL;
 }
 
-JOWW(jboolean, setHardwareDecode)(JNIEnv *env, jobject obj, jboolean en) {
+JNI(jboolean, setHardwareDecode)(JNIEnv *env, jobject obj, jboolean en) {
 	return TRUE;
 }
 
-JOWW(jboolean, isHardwareDecode)(JNIEnv *env, jobject obj) {
+JNI(jboolean, isHardwareDecode)(JNIEnv *env, jobject obj) {
 	return TRUE;
 }
 

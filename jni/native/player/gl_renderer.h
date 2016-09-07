@@ -12,8 +12,8 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <native/base.h>
-#include <native/com_ruilin_rlplayer_player_JJMediaSDK.h>
 #include <native/decoder/hw_deocder.h>
+#include "../com_ruilin_rlplayer_player_RlMediaSDK.h"
 
 
 typedef enum {

@@ -18,12 +18,13 @@ typedef struct {
 	BOOL isOpened;
 } Decoder;
 
-#define FUN_PATH	"()L"JAVA_CLASS("JJVideoDecoder")";"
+#define JAVA_FUN_PATH			"()L"JAVA_CLASS_NAME_DECODER";"
+
 /* 获取单例 */
-#define getJavaDecoder(env, clazz, jDecoder) { 																			\
-		clazz = (*env)->FindClass(env, JAVA_CLASS("JJVideoDecoder")); 											\
-		jmethodID method = (*env)->GetStaticMethodID(env, clazz, "getInstance", FUN_PATH); 	\
-		jDecoder = (*env)->CallStaticObjectMethod(env, clazz, method); 										\
+#define getJavaDecoder(env, clazz, jDecoder) { 																						\
+		clazz = (*env)->FindClass(env, JAVA_CLASS_NAME_DECODER); 														\
+		jmethodID method = (*env)->GetStaticMethodID(env, clazz, "getInstance", JAVA_FUN_PATH); 	\
+		jDecoder = (*env)->CallStaticObjectMethod(env, clazz, method); 													\
 }
 
 BOOL hw_decoder_isHwSupported(void *_decoder, JNIEnv * env) {

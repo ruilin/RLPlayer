@@ -528,7 +528,7 @@ static int32_t onRenderH264(char *data, int32_t width, int32_t height, int texId
 	return 0;
 }
 
-JOWW(jboolean, glInit) (JNIEnv *env, jobject obj, jobject glView, jint width, jint height) {
+JNI(jboolean, glInit) (JNIEnv *env, jobject obj, jobject glView, jint width, jint height) {
 	if (jview != NULL) {
 		(*env)->DeleteGlobalRef(env, jview);
 		jview = NULL;
@@ -540,7 +540,7 @@ JOWW(jboolean, glInit) (JNIEnv *env, jobject obj, jobject glView, jint width, ji
 	return B_TRUE;
 }
 
-JOWW(void, glUninit)(JNIEnv *env, jobject obj) {
+JNI(void, glUninit)(JNIEnv *env, jobject obj) {
 	isCreated = B_FALSE;
 	_textureWidth = -1;
 	_textureHeight = -1;
@@ -551,7 +551,7 @@ JOWW(void, glUninit)(JNIEnv *env, jobject obj) {
 	return;
 }
 
-JOWW(void, glRender)(JNIEnv *env, jobject obj, jboolean _isHwRending) {
+JNI(void, glRender)(JNIEnv *env, jobject obj, jboolean _isHwRending) {
 	if (isCreated == B_FALSE) {
 		return;
 	}
@@ -569,7 +569,7 @@ JOWW(void, glRender)(JNIEnv *env, jobject obj, jboolean _isHwRending) {
 	return;
 }
 
-JOWW(jint, glGenTexture)(JNIEnv *env, jobject obj) {
+JNI(jint, glGenTexture)(JNIEnv *env, jobject obj) {
 //	GLuint texId[1];
 //	glGenTextures(1, texId);
 //	glBindTexture(GL_TEXTURE_EXTERNAL_OES, texId[0]);

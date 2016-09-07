@@ -1,6 +1,6 @@
 /*
  * player.c
- *
+ * native surface
  *  Created on: 2016年6月22日
  *      Author: Ruilin
  */

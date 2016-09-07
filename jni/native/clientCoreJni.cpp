@@ -354,7 +354,7 @@ static mediaCallBack *mediaCallBackP = NULL;
 /*
  * 初始
  */
-JOWW(jboolean, initAvCoreJni) (JNIEnv *env, jobject obj, jobject ctx,
+JNI(jboolean, initAvCoreJni) (JNIEnv *env, jobject obj, jobject ctx,
 		jobject cb, jint lbsType, jboolean ifOpenHwDecode, jstring logPath) {
 	DLog1("SDK CLIENT clientCoreInitJni");
 	isStopingVideo = false;
@@ -406,7 +406,7 @@ JOWW(jboolean, initAvCoreJni) (JNIEnv *env, jobject obj, jobject ctx,
 /*
  * 注销
  */
-JOWW(jboolean, freeAvCoreJni) (JNIEnv *env, jobject obj) {
+JNI(jboolean, freeAvCoreJni) (JNIEnv *env, jobject obj) {
 	DLog1("SDK CLIENT clientCoreDeInitJni()");
 	isStopingVideo = true;
 	isStopingAudio = true;
@@ -437,7 +437,7 @@ JOWW(jboolean, freeAvCoreJni) (JNIEnv *env, jobject obj) {
 /*
  * 开始收流
  */
-JOWW(jboolean, rcvStreamStartJni) (JNIEnv *env, jobject obj, jobject surface,
+JNI(jboolean, rcvStreamStartJni) (JNIEnv *env, jobject obj, jobject surface,
 		jint userId, jint roomId) {
 	DLog1("SDK CLIENT clientRcvStreamStartJni()");
 	bool errFlg = true;
@@ -476,7 +476,7 @@ JOWW(jboolean, rcvStreamStartJni) (JNIEnv *env, jobject obj, jobject surface,
 /*
  * 停止收流
  */
-JOWW(jboolean, rcvStreamStopJni) (JNIEnv *env, jobject obj) {
+JNI(jboolean, rcvStreamStopJni) (JNIEnv *env, jobject obj) {
 	DLog1("SDK CLIENT clientRcvStreamStopJni()");
 
 	bool errFlg = true;
@@ -501,7 +501,7 @@ JOWW(jboolean, rcvStreamStopJni) (JNIEnv *env, jobject obj) {
 	return errFlg;
 }
 
-JOWW(jboolean, muteAudioStreamJni) (JNIEnv *env, jobject obj, jboolean en) {
+JNI(jboolean, muteAudioStreamJni) (JNIEnv *env, jobject obj, jboolean en) {
 	DLog1("SDK CLIENT clientMuteAudioStreamJni()");
 //	mAudioLock.lock();
 //	if (clientCoreP == NULL) {
@@ -516,7 +516,7 @@ JOWW(jboolean, muteAudioStreamJni) (JNIEnv *env, jobject obj, jboolean en) {
 	return true;
 }
 
-JOWW(jboolean, muteVideoStreamJni) (JNIEnv *env, jobject obj, jboolean en) {
+JNI(jboolean, muteVideoStreamJni) (JNIEnv *env, jobject obj, jboolean en) {
 	DLog1("SDK CLIENT clientMuteVideoStreamJni()");
 //	scoped_lock locker(&mVideoLock);
 	mVideoLock.lock();
@@ -541,13 +541,13 @@ jstring stoJstring(JNIEnv* env, const char* pat) {
 	return (jstring) env->NewObject(strClass, ctorID, bytes, encoding);
 }
 
-JOWW(jstring, getSDKVerion) (JNIEnv *env, jobject obj) {
+JNI(jstring, getSDKVerion) (JNIEnv *env, jobject obj) {
 	DLog1("SDK CLIENT clientGetSDKVerion()");
 //	scoped_lock locker(&mLock);
 	return stoJstring(env, MEDIA_SDK_VER);
 }
 
-JOWW(jobject, getMediaInfo) (JNIEnv *env, jobject obj) {
+JNI(jobject, getMediaInfo) (JNIEnv *env, jobject obj) {
 	string ip;
 	string& _ip = ip;
 	int port;
@@ -571,7 +571,7 @@ JOWW(jobject, getMediaInfo) (JNIEnv *env, jobject obj) {
 	return newObj;
 }
 
-JOWW(jboolean, setHardwareDecode) (JNIEnv *env, jobject obj, jboolean en) {
+JNI(jboolean, setHardwareDecode) (JNIEnv *env, jobject obj, jboolean en) {
 	if (clientCoreP != NULL) {
 		changeDecodeMode(env, en && isHwDecodeSupported);
 		return true;
@@ -579,11 +579,11 @@ JOWW(jboolean, setHardwareDecode) (JNIEnv *env, jobject obj, jboolean en) {
 	return false;
 }
 
-JOWW(jboolean, isHardwareDecode)(JNIEnv *env, jobject obj) {
+JNI(jboolean, isHardwareDecode)(JNIEnv *env, jobject obj) {
 	return isHwDecode;
 }
 
-JOWW(jboolean, setMainRoomId) (JNIEnv *env, jobject obj, jint mainRoomId) {
+JNI(jboolean, setMainRoomId) (JNIEnv *env, jobject obj, jint mainRoomId) {
 	if (clientCoreP != NULL) {
 		clientCoreP->setMainRoom(mainRoomId);
 		return true;
@@ -591,7 +591,7 @@ JOWW(jboolean, setMainRoomId) (JNIEnv *env, jobject obj, jint mainRoomId) {
 	return false;
 }
 
-JOWW(jboolean, setMicinfo) (JNIEnv *env, jobject obj, jboolean en) {
+JNI(jboolean, setMicinfo) (JNIEnv *env, jobject obj, jboolean en) {
 	if (clientCoreP != NULL) {
 		clientCoreP->setMicinfo(en);
 		return true;
@@ -599,7 +599,7 @@ JOWW(jboolean, setMicinfo) (JNIEnv *env, jobject obj, jboolean en) {
 	return false;
 }
 
-JOWW(jboolean, networkChange) (JNIEnv *env, jobject obj) {
+JNI(jboolean, networkChange) (JNIEnv *env, jobject obj) {
 	if (clientCoreP != NULL) {
 		clientCoreP->networkChange();
 		return true;

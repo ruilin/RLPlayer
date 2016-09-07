@@ -9,7 +9,7 @@
 #define JNI_JNI_PLAYER_HW_DEOCDER_H_
 
 #include <native/base.h>
-#include <native/com_ruilin_rlplayer_player_JJMediaSDK.h>
+#include "../com_ruilin_rlplayer_player_RlMediaSDK.h"
 
 void *hw_decoder_create(JNIEnv *env);
 void hw_decoder_destroy(JNIEnv *env, void *_decoder);
