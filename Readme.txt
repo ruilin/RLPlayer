@@ -6,3 +6,4 @@
 * 软解码基于FFMPEG解码库实现
 * 采用OpenGL进行视频渲染
 
+![image](https://github.com/ruilin/RLPlayer/blob/master/preview.png)
