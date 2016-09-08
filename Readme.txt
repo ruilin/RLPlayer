@@ -6,4 +6,3 @@
 * 软解码基于FFMPEG解码库实现
 * 采用OpenGL进行视频渲染
 
-![image](http://img.blog.csdn.net/20160908162147560)
