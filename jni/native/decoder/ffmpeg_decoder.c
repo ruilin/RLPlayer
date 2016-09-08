@@ -45,15 +45,6 @@ void custom_log(void *ptr, int level, const char* fmt, va_list vl) {
 }
 
 static BOOL _toYUV(FfmpegDecoder *decoder, unsigned char *mOutputBuffer, AVCodecContext *pCodecCtx, int yuv_size, AVFrame *pFrameYUV, ffmpeg_decoder_callback_video *onVideo, void *callbackObject) {
-	/* player control */
-	pthread_mutex_lock(&decoder->mMutexLock);
-	if (decoder->status == STATUS_STOP) {
-		pthread_mutex_unlock(&decoder->mMutexLock);
-		return FALSE;
-	} else  if (decoder->status == STATUS_PAUSE) {
-		 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
-	}
-	pthread_mutex_unlock(&decoder->mMutexLock);
     int i, j, k;
     for (i = 0; i < pCodecCtx->height; i++) {
     	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
@@ -65,6 +56,15 @@ static BOOL _toYUV(FfmpegDecoder *decoder, unsigned char *mOutputBuffer, AVCodec
         memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
     }
 	onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
+	/* player control */
+	pthread_mutex_lock(&decoder->mMutexLock);
+	if (decoder->status == STATUS_STOP) {
+		pthread_mutex_unlock(&decoder->mMutexLock);
+		return FALSE;
+	} else  if (decoder->status == STATUS_PAUSE) {
+		 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
+	}
+	pthread_mutex_unlock(&decoder->mMutexLock);
 	return TRUE;
 }
 
@@ -85,7 +85,6 @@ int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg
 	double time_duration = 0.0;
 	int err_code;
 	char info[1000] = { 0 };
-
 
 	FfmpegDecoder *decoder = (FfmpegDecoder *)ffmpegDecoder;
 	if (decoder == NULL) {
@@ -196,26 +195,29 @@ int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg
 //				fwrite(pFrameYUV->data[1], 1, y_size / 4, fp_yuv);  //U
 //				fwrite(pFrameYUV->data[2], 1, y_size / 4, fp_yuv);  //V
 
-				/* player control */
-				pthread_mutex_lock(&decoder->mMutexLock);
-				if (decoder->status == STATUS_STOP) {
-					pthread_mutex_unlock(&decoder->mMutexLock);
-					return FALSE;
-				} else  if (decoder->status == STATUS_PAUSE) {
-					 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
+				if (_toYUV(decoder, mOutputBuffer, pCodecCtx, yuv_size, pFrameYUV, onVideo, callbackObject) == FALSE) {
+					return -1;
 				}
-				pthread_mutex_unlock(&decoder->mMutexLock);
-		        int i, j, k;
-		        for (i = 0; i < pCodecCtx->height; i++) {
-		        	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
-		        }
-		        for (j = 0; j < pCodecCtx->height / 2; j++) {
-		        	memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
-		        }
-		        for (k = 0; k < pCodecCtx->height / 2; k++) {
-		            memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
-		        }
-				onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
+				/* player control */
+//				pthread_mutex_lock(&decoder->mMutexLock);
+//				if (decoder->status == STATUS_STOP) {
+//					pthread_mutex_unlock(&decoder->mMutexLock);
+//					return FALSE;
+//				} else  if (decoder->status == STATUS_PAUSE) {
+//					 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
+//				}
+//				pthread_mutex_unlock(&decoder->mMutexLock);
+//		        int i, j, k;
+//		        for (i = 0; i < pCodecCtx->height; i++) {
+//		        	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
+//		        }
+//		        for (j = 0; j < pCodecCtx->height / 2; j++) {
+//		        	memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
+//		        }
+//		        for (k = 0; k < pCodecCtx->height / 2; k++) {
+//		            memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
+//		        }
+//				onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
 				//Output info
 				char pictype_str[10] = { 0 };
 				switch (pFrame->pict_type) {
@@ -254,27 +256,29 @@ int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg
 //		fwrite(pFrameYUV->data[1], 1, y_size / 4, fp_yuv);  //U
 //		fwrite(pFrameYUV->data[2], 1, y_size / 4, fp_yuv);  //V
 
-
-		/* player control */
-		pthread_mutex_lock(&decoder->mMutexLock);
-		if (decoder->status == STATUS_STOP) {
-			pthread_mutex_unlock(&decoder->mMutexLock);
-			return FALSE;
-		} else  if (decoder->status == STATUS_PAUSE) {
-			 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
+		if (_toYUV(decoder, mOutputBuffer, pCodecCtx, yuv_size, pFrameYUV, onVideo, callbackObject) == FALSE) {
+			return -1;
 		}
-		pthread_mutex_unlock(&decoder->mMutexLock);
-        int i, j, k;
-        for (i = 0; i < pCodecCtx->height; i++) {
-        	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
-        }
-        for (j = 0; j < pCodecCtx->height / 2; j++) {
-        	memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
-        }
-        for (k = 0; k < pCodecCtx->height / 2; k++) {
-            memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
-        }
-		onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
+		/* player control */
+//		pthread_mutex_lock(&decoder->mMutexLock);
+//		if (decoder->status == STATUS_STOP) {
+//			pthread_mutex_unlock(&decoder->mMutexLock);
+//			return FALSE;
+//		} else  if (decoder->status == STATUS_PAUSE) {
+//			 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
+//		}
+//		pthread_mutex_unlock(&decoder->mMutexLock);
+//        int i, j, k;
+//        for (i = 0; i < pCodecCtx->height; i++) {
+//        	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
+//        }
+//        for (j = 0; j < pCodecCtx->height / 2; j++) {
+//        	memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
+//        }
+//        for (k = 0; k < pCodecCtx->height / 2; k++) {
+//            memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
+//        }
+//		onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
 
 		//Output info
 		char pictype_str[10] = { 0 };
@@ -331,6 +335,7 @@ void ffmpeg_decoder_pause(void *ffmpegDecoder) {
 	pthread_mutex_lock(&decoder->mMutexLock);
 	if (decoder != NULL && decoder->status == STATUS_PLAYING) {
 		decoder->status = STATUS_PAUSE;
+		pthread_cond_signal(&decoder->mCondLock);
 	}
 	pthread_mutex_unlock(&decoder->mMutexLock);
 	return;
