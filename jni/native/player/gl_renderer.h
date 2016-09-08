@@ -24,6 +24,7 @@ typedef enum {
 void gl_init(JNIEnv *env, GL_RENDER_TYPE defMode, void *deocder);
 void gl_uninit(JNIEnv *env);
 void gl_render_frame(JNIEnv *env, unsigned char *data, unsigned int len, unsigned short width, unsigned short height);
+void gl_render_clean(JNIEnv *env);
 void gl_set_type(JNIEnv *env, GL_RENDER_TYPE type);
 BOOL gl_isHwRending(void);
 

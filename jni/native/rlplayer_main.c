@@ -73,10 +73,16 @@ JNI(jboolean, freeAvCoreJni)(JNIEnv *env, jobject obj) {
 	return TRUE;
 }
 
-void ffmpeg_decoder_onVideo(void *callbackObject, unsigned char *data, unsigned int len, unsigned short width, unsigned short height) {
+void ffmpeg_decoder_onVideoData(void *callbackObject, unsigned char *data, unsigned int len, unsigned short width, unsigned short height) {
 	JNIEnv *env = (JNIEnv *)callbackObject;
 	gl_render_frame(env, (unsigned char *)data, len, width, height);
 	usleep(41000);
+	return;
+}
+
+void ffmpeg_decoder_onVideoEnd(void *callbackObject) {
+	JNIEnv *env = (JNIEnv *)callbackObject;
+	gl_render_clean(env);
 	return;
 }
 
@@ -87,9 +93,7 @@ void *run_startPlay(void *path) {
 	if (env == NULL) {
 		iRet = (*jvm)->AttachCurrentThread(jvm, (JNIEnv **) &env, NULL);
 	}
-	char filePath[128] = {};
-	sprintf(filePath, "%s", (char *)path);
-	ffmpeg_decoder_playerFile(sw_decoder, filePath, ffmpeg_decoder_onVideo, env);
+	ffmpeg_decoder_playerFile(sw_decoder, path, ffmpeg_decoder_onVideoData, ffmpeg_decoder_onVideoEnd, env);
 	 if (iRet != -1) {
 		 (*jvm)->DetachCurrentThread(jvm);
 	 }
@@ -97,7 +101,9 @@ void *run_startPlay(void *path) {
 }
 
 JNI(jboolean, startPlayMediaFile)(JNIEnv *env, jobject obj, jstring path) {
-	const char *filePath = (*env)->GetStringUTFChars(env, path, NULL);
+	const char *_filePath = (*env)->GetStringUTFChars(env, path, NULL);
+	static char filePath[128];
+	sprintf(filePath, "%s", (char *)_filePath);
 	(*env)->ReleaseStringUTFChars(env, path, filePath);
 
 	pthread_t threadId;

@@ -17,7 +17,8 @@
 #include <libffmpeg/include/libswscale/swscale.h>
 #include "base.h"
 
-typedef void ffmpeg_decoder_callback_video(void *callbackObject, unsigned char *data, unsigned int len, unsigned short width, unsigned short height);
+typedef void ffmpeg_decoder_on_video_data(void *callbackObject, unsigned char *data, unsigned int len, unsigned short width, unsigned short height);
+typedef void ffmpeg_decoder_on_video_end(void *callbackObject);
 
 typedef enum {
 	STATUS_PLAYING			= 0,
@@ -27,7 +28,9 @@ typedef enum {
 
 void *ffmpeg_decoder_create();
 void ffmpeg_decoder_destroy(void *ffmpegDecoder);
-int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg_decoder_callback_video *onVideo, void *callbackObject);
+int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str,
+													ffmpeg_decoder_on_video_data *onVideoData,
+													ffmpeg_decoder_on_video_end *onVideoEnd, void *callbackObject);
 void ffmpeg_decoder_resume(void *ffmpegDecoder);
 void ffmpeg_decoder_pause(void *ffmpegDecoder);
 void ffmpeg_decoder_stop(void *ffmpegDecoder);

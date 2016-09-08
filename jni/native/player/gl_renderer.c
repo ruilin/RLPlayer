@@ -192,6 +192,22 @@ void gl_render_frame(JNIEnv *env, unsigned char *data, unsigned int len, unsigne
 	return;
 }
 
+void gl_render_clean(JNIEnv *env) {
+	pthread_mutex_lock(&mLock);
+	if (jview == NULL) {
+		LOGE("gl_render_frame() jview NULL");
+		goto RETURN;
+	}
+	jclass clazz = (*env)->GetObjectClass(env, jview);
+	jmethodID method = (*env)->GetMethodID(env, clazz, "clearColor", "()V");
+	(*env)->CallVoidMethod(env, jview, method);
+	(*env)->DeleteLocalRef(env, clazz);
+
+	RETURN:
+	pthread_mutex_unlock(&mLock);
+	return;
+}
+
 /**
  * mode:
  * 0 - hardware

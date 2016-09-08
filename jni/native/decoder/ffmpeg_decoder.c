@@ -44,18 +44,20 @@ void custom_log(void *ptr, int level, const char* fmt, va_list vl) {
 	}
 }
 
-static BOOL _toYUV(FfmpegDecoder *decoder, unsigned char *mOutputBuffer, AVCodecContext *pCodecCtx, int yuv_size, AVFrame *pFrameYUV, ffmpeg_decoder_callback_video *onVideo, void *callbackObject) {
-    int i, j, k;
-    for (i = 0; i < pCodecCtx->height; i++) {
-    	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
-    }
-    for (j = 0; j < pCodecCtx->height / 2; j++) {
-    	memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
-    }
-    for (k = 0; k < pCodecCtx->height / 2; k++) {
-        memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
-    }
-	onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
+static BOOL _toYUV(FfmpegDecoder *decoder, unsigned char *mOutputBuffer, AVCodecContext *pCodecCtx, int yuv_size, AVFrame *pFrameYUV, ffmpeg_decoder_on_video_data *onVideoData, void *callbackObject) {
+	if (onVideoData != NULL) {
+		int i, j, k;
+		for (i = 0; i < pCodecCtx->height; i++) {
+			memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
+		}
+		for (j = 0; j < pCodecCtx->height / 2; j++) {
+			memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
+		}
+		for (k = 0; k < pCodecCtx->height / 2; k++) {
+			memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
+		}
+		onVideoData(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
+	}
 	/* player control */
 	pthread_mutex_lock(&decoder->mMutexLock);
 	if (decoder->status == STATUS_STOP) {
@@ -68,7 +70,9 @@ static BOOL _toYUV(FfmpegDecoder *decoder, unsigned char *mOutputBuffer, AVCodec
 	return TRUE;
 }
 
-int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg_decoder_callback_video *onVideo, void *callbackObject) {
+int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str,
+													ffmpeg_decoder_on_video_data *onVideoData,
+													ffmpeg_decoder_on_video_end *onVideoEnd, void *callbackObject) {
 	AVFormatContext *pFormatCtx;
 	int i, videoindex;
 	AVCodecContext *pCodecCtx;
@@ -195,29 +199,9 @@ int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg
 //				fwrite(pFrameYUV->data[1], 1, y_size / 4, fp_yuv);  //U
 //				fwrite(pFrameYUV->data[2], 1, y_size / 4, fp_yuv);  //V
 
-				if (_toYUV(decoder, mOutputBuffer, pCodecCtx, yuv_size, pFrameYUV, onVideo, callbackObject) == FALSE) {
-					return -1;
+				if (_toYUV(decoder, mOutputBuffer, pCodecCtx, yuv_size, pFrameYUV, onVideoData, callbackObject) == FALSE) {
+					goto RETURN;
 				}
-				/* player control */
-//				pthread_mutex_lock(&decoder->mMutexLock);
-//				if (decoder->status == STATUS_STOP) {
-//					pthread_mutex_unlock(&decoder->mMutexLock);
-//					return FALSE;
-//				} else  if (decoder->status == STATUS_PAUSE) {
-//					 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
-//				}
-//				pthread_mutex_unlock(&decoder->mMutexLock);
-//		        int i, j, k;
-//		        for (i = 0; i < pCodecCtx->height; i++) {
-//		        	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
-//		        }
-//		        for (j = 0; j < pCodecCtx->height / 2; j++) {
-//		        	memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
-//		        }
-//		        for (k = 0; k < pCodecCtx->height / 2; k++) {
-//		            memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
-//		        }
-//				onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
 				//Output info
 				char pictype_str[10] = { 0 };
 				switch (pFrame->pict_type) {
@@ -256,29 +240,9 @@ int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg
 //		fwrite(pFrameYUV->data[1], 1, y_size / 4, fp_yuv);  //U
 //		fwrite(pFrameYUV->data[2], 1, y_size / 4, fp_yuv);  //V
 
-		if (_toYUV(decoder, mOutputBuffer, pCodecCtx, yuv_size, pFrameYUV, onVideo, callbackObject) == FALSE) {
-			return -1;
+		if (_toYUV(decoder, mOutputBuffer, pCodecCtx, yuv_size, pFrameYUV, onVideoData, callbackObject) == FALSE) {
+			goto RETURN;
 		}
-		/* player control */
-//		pthread_mutex_lock(&decoder->mMutexLock);
-//		if (decoder->status == STATUS_STOP) {
-//			pthread_mutex_unlock(&decoder->mMutexLock);
-//			return FALSE;
-//		} else  if (decoder->status == STATUS_PAUSE) {
-//			 pthread_cond_wait(&decoder->mCondLock, &decoder->mMutexLock);
-//		}
-//		pthread_mutex_unlock(&decoder->mMutexLock);
-//        int i, j, k;
-//        for (i = 0; i < pCodecCtx->height; i++) {
-//        	memcpy(mOutputBuffer + pCodecCtx->width * i, pFrameYUV->data[0] + pFrameYUV->linesize[0] * i, pCodecCtx->width);
-//        }
-//        for (j = 0; j < pCodecCtx->height / 2; j++) {
-//        	memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j, pFrameYUV->data[1] + pFrameYUV->linesize[1] * j, (pCodecCtx->width >> 1));
-//        }
-//        for (k = 0; k < pCodecCtx->height / 2; k++) {
-//            memcpy(mOutputBuffer + pCodecCtx->width * i + (pCodecCtx->width >> 1) * j + (pCodecCtx->width >> 1) * k, pFrameYUV->data[2] + pFrameYUV->linesize[2] * k, (pCodecCtx->width >> 1));
-//        }
-//		onVideo(callbackObject, mOutputBuffer, yuv_size, pCodecCtx->width, pCodecCtx->height);
 
 		//Output info
 		char pictype_str[10] = { 0 };
@@ -316,6 +280,11 @@ int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str, ffmpeg
 
 	free(mOutputBuffer);
 	mOutputBuffer = NULL;
+
+RETURN:
+	if (onVideoEnd != NULL) {
+		onVideoEnd(callbackObject);
+	}
 	return 0;
 }
 

@@ -25,7 +25,7 @@ public class RlVideoView extends GLSurfaceView implements Renderer, SurfaceTextu
 	private SurfaceTexture mSurfaceTexture;
 	private int mUpdateSurface = 0;
 //	private DirectDrawer mDirectDrawer;
-	private boolean mClearColor;
+	private boolean mClearColor = true;
 
 	public RlVideoView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -64,7 +64,6 @@ public class RlVideoView extends GLSurfaceView implements Renderer, SurfaceTextu
 		Log.i(TAG, "onSurfaceChanged...");
 //		GLES20.glViewport(0, 0, width, height);
 		RlMediaSDK.glInit(this, width, height);
-		clearColor();
 	}
 
 	@Override
