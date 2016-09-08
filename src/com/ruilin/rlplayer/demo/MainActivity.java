@@ -1,4 +1,5 @@
 /**
+ * Simple media player for android
  * @author Ruilin
  */
 package com.ruilin.rlplayer.demo;
