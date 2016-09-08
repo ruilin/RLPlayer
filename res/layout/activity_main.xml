@@ -14,9 +14,10 @@
 
     <TextView
         android:id="@+id/text_label1"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Input Bitstream" />
+        android:text="Input File" />
 
     <EditText
         android:id="@+id/input_url"
@@ -25,21 +26,6 @@
         android:ems="100"
         android:inputType="textUri"
         android:text="sintel.mp4"
-        android:textColor="#ff8c00" />
-
-    <TextView
-        android:id="@+id/text_label2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Output Raw YUV" />
-
-    <EditText
-        android:id="@+id/output_url"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="100"
-        android:inputType="textUri"
-        android:text="sintel.yuv"
         android:textColor="#ff8c00" />
 
     <LinearLayout

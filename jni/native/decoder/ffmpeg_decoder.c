@@ -282,6 +282,9 @@ int ffmpeg_decoder_playerFile(void *ffmpegDecoder, const char *input_str,
 	mOutputBuffer = NULL;
 
 RETURN:
+	pthread_mutex_lock(&decoder->mMutexLock);
+	decoder->status = STATUS_STOP;
+	pthread_mutex_unlock(&decoder->mMutexLock);
 	if (onVideoEnd != NULL) {
 		onVideoEnd(callbackObject);
 	}

@@ -1,19 +1,5 @@
 /**
- * ��򵥵Ļ���FFmpeg����Ƶ������-��׿ - �����
- * Simplest FFmpeg Android Decoder - One Library
- * 
- * ������ Lei Xiaohua
- * leixiaohua1020@126.com
- * �й�ý��ѧ/���ֵ��Ӽ���
- * Communication University of China / Digital TV Technology
- * http://blog.csdn.net/leixiaohua1020
- * 
- * �������ǰ�׿ƽ̨����򵥵Ļ���FFmpeg����Ƶ��������
- * ����Խ��������Ƶ��ݽ����YUV������ݡ�
- * 
- * This software is the simplest decoder based on FFmpeg in Android. 
- * It can decode video stream to raw YUV data.
- * 
+ * @author Ruilin
  */
 package com.ruilin.rlplayer.demo;
 
@@ -34,7 +20,6 @@ import android.widget.EditText;
 public class MainActivity extends Activity implements OnClickListener {
 
 	EditText urlEdittext_input;
-	EditText urlEdittext_output;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +29,6 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
         
         urlEdittext_input = (EditText) this.findViewById(R.id.input_url);
-        urlEdittext_output = (EditText) this.findViewById(R.id.output_url);
         
 		findViewById(R.id.button_start).setOnClickListener(this);
 		findViewById(R.id.button_pause).setOnClickListener(this);
@@ -71,11 +55,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			String urltext_input=urlEdittext_input.getText().toString();
 	        String inputurl=folderurl+"/"+urltext_input;
 	        
-	        String urltext_output=urlEdittext_output.getText().toString();
-	        String outputurl=folderurl+"/"+urltext_output;
-	        
 	        Log.i("inputurl",inputurl);
-	        Log.i("outputurl",outputurl);
 	    
 //	        decode(inputurl,outputurl);
 	        RlMediaSDK.startPlayMediaFile(inputurl);
@@ -89,8 +69,4 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
     
-//    static{
-//    	System.loadLibrary("ffmpeg");
-//    	System.loadLibrary("rlplayer");
-//    }
 }
