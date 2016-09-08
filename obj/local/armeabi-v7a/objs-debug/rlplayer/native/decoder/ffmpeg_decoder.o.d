@@ -22,6 +22,23 @@ obj/local/armeabi-v7a/objs-debug/rlplayer/native/decoder/ffmpeg_decoder.o: \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/time.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/siginfo.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm-generic/siginfo.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/pthread.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/signal.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/limits.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/limits.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/limits.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/internal_types.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/limits.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/syslimits.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/page.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/string.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/malloc.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/signal.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm-generic/signal.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/sigcontext.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/ucontext.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/user.h \
+ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sched.h \
  jni/libffmpeg/include/libavcodec/avcodec.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/errno.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/errno.h \
@@ -36,17 +53,8 @@ obj/local/armeabi-v7a/objs-debug/rlplayer/native/decoder/ffmpeg_decoder.o: \
  jni/libffmpeg/include/libavutil/avutil.h \
  jni/libffmpeg/include/libavutil/common.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/inttypes.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/limits.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/limits.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/limits.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/internal_types.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/limits.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/syslimits.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/page.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/math.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/stdlib.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/string.h \
- E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/malloc.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/alloca.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/strings.h \
  E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/memory.h \
@@ -121,6 +129,40 @@ E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/siginfo.h
 
 E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm-generic/siginfo.h:
 
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/pthread.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/signal.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/limits.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/limits.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/limits.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/internal_types.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/limits.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/syslimits.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/page.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/string.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/malloc.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/signal.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm-generic/signal.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/sigcontext.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/ucontext.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/user.h:
+
+E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sched.h:
+
 jni/libffmpeg/include/libavcodec/avcodec.h:
 
 E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/errno.h:
@@ -149,27 +191,9 @@ jni/libffmpeg/include/libavutil/common.h:
 
 E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/inttypes.h:
 
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/limits.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/limits.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/limits.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/internal_types.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/limits.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/syslimits.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/page.h:
-
 E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/math.h:
 
 E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/stdlib.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/string.h:
-
-E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/malloc.h:
 
 E:/Tools/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/alloca.h:
 

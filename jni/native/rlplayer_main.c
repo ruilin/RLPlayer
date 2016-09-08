@@ -10,10 +10,12 @@
 #include "com_ruilin_rlplayer_player_RlMediaSDK.h"
 #include "player/player.h"
 #include "player/gl_renderer.h"
+#include "decoder/ffmpeg_decoder.h"
 
 
 static JavaVM *jvm = NULL;
 static void *player = NULL;
+static void *sw_decoder = NULL;
 static void *hw_decoder = NULL;
 static BOOL isHwDecodeSupported;
 static BOOL isHwDecode;
@@ -57,12 +59,15 @@ JNI(jboolean, initAvCoreJni)(JNIEnv *env, jobject obj, jobject ctx, jobject cb, 
 
 	gl_init(env, isHwDecode ? GL_RENDER_HW : GL_RENDER_SW, hw_decoder);
 
+	sw_decoder = ffmpeg_decoder_create();
 	CONNECT_CMD_ERR:
 	return errFlg;
 }
 
 JNI(jboolean, freeAvCoreJni)(JNIEnv *env, jobject obj) {
 	gl_uninit(env);
+	ffmpeg_decoder_destroy(sw_decoder);
+	sw_decoder = NULL;
 	hw_decoder_destroy(env, hw_decoder);
 	hw_decoder = NULL;
 	return TRUE;
@@ -70,27 +75,46 @@ JNI(jboolean, freeAvCoreJni)(JNIEnv *env, jobject obj) {
 
 void ffmpeg_decoder_onVideo(void *callbackObject, unsigned char *data, unsigned int len, unsigned short width, unsigned short height) {
 	JNIEnv *env = (JNIEnv *)callbackObject;
-//	jint iRet = -1;
-//	(*jvm)->GetEnv(jvm, (void**) &env, JNI_VERSION_1_4);
-//	if (env == NULL) {
-//		iRet = (*jvm)->AttachCurrentThread(jvm, (JNIEnv **) &env, NULL);
-//	}
 	gl_render_frame(env, (unsigned char *)data, len, width, height);
 	usleep(41000);
-//	 if (iRet != -1) {
-//		 (*jvm)->DetachCurrentThread(jvm);
-//	 }
 	return;
 }
 
-JNI(jboolean, rcvStreamStartJni)(JNIEnv *env, jobject obj, jstring path) {
+void *run_startPlay(void *path) {
+	jint iRet = -1;
+	JNIEnv *env;
+	(*jvm)->GetEnv(jvm, (void**) &env, JNI_VERSION_1_4);
+	if (env == NULL) {
+		iRet = (*jvm)->AttachCurrentThread(jvm, (JNIEnv **) &env, NULL);
+	}
+	char filePath[128] = {};
+	sprintf(filePath, "%s", (char *)path);
+	ffmpeg_decoder_playerFile(sw_decoder, filePath, ffmpeg_decoder_onVideo, env);
+	 if (iRet != -1) {
+		 (*jvm)->DetachCurrentThread(jvm);
+	 }
+	 return NULL;
+}
+
+JNI(jboolean, startPlayMediaFile)(JNIEnv *env, jobject obj, jstring path) {
 	const char *filePath = (*env)->GetStringUTFChars(env, path, NULL);
 	(*env)->ReleaseStringUTFChars(env, path, filePath);
-	decodeFile(filePath, ffmpeg_decoder_onVideo, env);
+
+	pthread_t threadId;
+	if(pthread_create(&threadId, NULL, run_startPlay, (void *)filePath) !=  0)  {
+		LOGE("pthread_create() error !!");
+	}
+
 	return TRUE;
 }
 
-JNI(jboolean, rcvStreamStopJni)(JNIEnv *env, jobject obj) {
+JNI(jboolean, pause)(JNIEnv *env, jobject obj) {
+	ffmpeg_decoder_pause(sw_decoder);
+	return TRUE;
+}
+
+JNI(jboolean, stop)(JNIEnv *env, jobject obj) {
+	ffmpeg_decoder_stop(sw_decoder);
 	return TRUE;
 }
 

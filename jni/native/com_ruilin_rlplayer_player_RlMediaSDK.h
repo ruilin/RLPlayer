@@ -14,8 +14,9 @@ extern "C" {
 
 JNI(jboolean, initAvCoreJni)(JNIEnv *env, jobject obj, jobject ctx, jobject cb, jboolean ifOpenHwDecode, jstring logPath);
 JNI(jboolean, freeAvCoreJni)(JNIEnv *env, jobject obj);
-JNI(jboolean, rcvStreamStartJni)(JNIEnv *env, jobject obj, jstring path);
-JNI(jboolean, rcvStreamStopJni)(JNIEnv *env, jobject obj);
+JNI(jboolean, startPlayMediaFile)(JNIEnv *env, jobject obj, jstring path);
+JNI(jboolean, stop)(JNIEnv *env, jobject obj);
+JNI(jboolean, pause)(JNIEnv *env, jobject obj);
 JNI(jboolean, muteAudioStreamJni)(JNIEnv *env, jobject obj, jboolean en);
 JNI(jboolean, muteVideoStreamJni)(JNIEnv *env, jobject obj, jboolean en);
 JNI(jstring, getSDKVerion)(JNIEnv *env, jobject obj);

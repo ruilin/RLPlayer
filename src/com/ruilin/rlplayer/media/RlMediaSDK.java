@@ -70,12 +70,14 @@ public class RlMediaSDK {
 	 * 开始接收流。但是在调用之前，使用onVideoSet和onAudioSet先设置好回调
 	 * 参数：userId是用户的ID，userId是房间的ID 返回值：true为成功，false为失败.
 	 */
-	public static native boolean rcvStreamStartJni(String path);
+	public static native boolean startPlayMediaFile(String path);
 
 	/**
 	 * 停止收流。 参数： 返回值：true为成功，false为失败.
 	 */
-	public static native boolean rcvStreamStopJni();
+	public static native boolean stop();
+	
+	public static native boolean pause();
 
 	/**
 	 * 关闭音频，发和收流时都会起作用 参数：en为true时，音频会被关闭。false时会打开音频

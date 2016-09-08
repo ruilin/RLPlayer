@@ -1,19 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context=".MainActivity" >
+    android:paddingTop="@dimen/activity_vertical_margin" >
 
     <com.ruilin.rlplayer.media.RlVideoView
         android:id="@+id/glview"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        />
+        android:layout_height="240dp" />
 
     <TextView
         android:id="@+id/text_label1"
@@ -43,14 +40,37 @@
         android:ems="100"
         android:inputType="textUri"
         android:text="sintel.yuv"
-        android:textColor="#ff8c00" >
-    </EditText>
+        android:textColor="#ff8c00" />
 
-    <Button
-        android:id="@+id/button_start"
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_start" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_stop"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_stop" />
+
+        <Button
+            android:id="@+id/button_pause"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_pause" />
+
+        <Button
+            android:id="@+id/button_start"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_start" />
+
+    </LinearLayout>
 
 </LinearLayout>

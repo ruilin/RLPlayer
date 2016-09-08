@@ -5,6 +5,8 @@
     <string name="app_author">Ruilin</string>
     <string name="label_url">URL</string>
     <string name="btn_start">Play</string>
+    <string name="btn_pause">Pause</string>
+    <string name="btn_stop">Stop</string>
     <string name="title_activity_sdl">SDLActivity</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>

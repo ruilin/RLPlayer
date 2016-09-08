@@ -31,8 +31,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener {
 
+	EditText urlEdittext_input;
+	EditText urlEdittext_output;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,29 +43,12 @@ public class MainActivity extends Activity {
         
         setContentView(R.layout.activity_main);
         
-		Button startButton = (Button) this.findViewById(R.id.button_start);
-		final EditText urlEdittext_input= (EditText) this.findViewById(R.id.input_url);
-		final EditText urlEdittext_output= (EditText) this.findViewById(R.id.output_url);
-		
-		startButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0){
-
-				String folderurl=Environment.getExternalStorageDirectory().getPath();
-				
-				String urltext_input=urlEdittext_input.getText().toString();
-		        String inputurl=folderurl+"/"+urltext_input;
-		        
-		        String urltext_output=urlEdittext_output.getText().toString();
-		        String outputurl=folderurl+"/"+urltext_output;
-		        
-		        Log.i("inputurl",inputurl);
-		        Log.i("outputurl",outputurl);
-		    
-//		        decode(inputurl,outputurl);
-		        RlMediaSDK.rcvStreamStartJni(inputurl);
-		        
-			}
-		});
+        urlEdittext_input = (EditText) this.findViewById(R.id.input_url);
+        urlEdittext_output = (EditText) this.findViewById(R.id.output_url);
+        
+		findViewById(R.id.button_start).setOnClickListener(this);
+		findViewById(R.id.button_pause).setOnClickListener(this);
+		findViewById(R.id.button_stop).setOnClickListener(this);
 		
     }
 
@@ -76,6 +61,33 @@ public class MainActivity extends Activity {
     
     //JNI
     public native int decode(String inputurl, String outputurl);
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.button_start:
+			String folderurl=Environment.getExternalStorageDirectory().getPath();
+			
+			String urltext_input=urlEdittext_input.getText().toString();
+	        String inputurl=folderurl+"/"+urltext_input;
+	        
+	        String urltext_output=urlEdittext_output.getText().toString();
+	        String outputurl=folderurl+"/"+urltext_output;
+	        
+	        Log.i("inputurl",inputurl);
+	        Log.i("outputurl",outputurl);
+	    
+//	        decode(inputurl,outputurl);
+	        RlMediaSDK.startPlayMediaFile(inputurl);
+			break;
+		case R.id.button_pause:
+			RlMediaSDK.pause();
+			break;
+		case R.id.button_stop:
+			 RlMediaSDK.stop();
+			break;
+		}
+	}
     
 //    static{
 //    	System.loadLibrary("ffmpeg");
