@@ -20,7 +20,7 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-	EditText urlEdittext_input;
+	private EditText urlEdittext_input;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
