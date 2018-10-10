@@ -1,5 +1,9 @@
 RLPlayer视频播放器
 ---
+这是一个简易的Android视频播放器
+
+![image](https://github.com/ruilin/RLPlayer/blob/master/preview.png)
+
 集成了两种硬解和软解两种视频解码模式
 
 核心技术：
@@ -12,4 +16,3 @@ RLPlayer视频播放器
   * 启动运行APP，点击Play按钮即可播放
 
 
-![image](https://github.com/ruilin/RLPlayer/blob/master/preview.png)
